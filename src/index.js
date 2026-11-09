@@ -14,7 +14,7 @@ console.log(isPalindrome("use stRictcIrts eSu"));
 // Также допускается использование регулярных выражений.
 function isPalindromeStrict(str) {
   for (let i = 0; i <= str.length / 2; i++) {
-    if (str[i].toLowerCase() !== str[str.length - 1 - i].toLowerCase()) return false;
+    if (str.at(i).toLowerCase() !== str.at(-i-1).toLowerCase()) return false;
   }
   return true;
 }
@@ -37,21 +37,44 @@ console.log(isAnagramm("казан", "наказ"));
 function isAnagrammStrict(str1, str2) {
   if (str1.length !== str2.length) return false;
 
-  const obj1 = {};
+  const objWithLetters = {};
   for (const letter of str1.toLowerCase()) {
-    Object.hasOwn(obj1, letter) ? obj1[letter]++ : (obj1[letter] = 1);
+    Object.hasOwn(objWithLetters, letter) ? objWithLetters[letter]++ : (objWithLetters[letter] = 1);
   }
 
-  const obj2 = {};
   for (const letter of str2.toLowerCase()) {
-    Object.hasOwn(obj2, letter) ? obj2[letter]++ : (obj2[letter] = 1);
+    if (!Object.hasOwn(objWithLetters, letter)) return false;
+    objWithLetters[letter]--;
   }
 
-  for (const letter in obj1) {
-    if (obj1[letter] !== obj2[letter]) return false;
-  }
+  for (const letter in objWithLetters) if (objWithLetters[letter] !== 0) return false;
 
   return true;
 }
 
 console.log(isAnagrammStrict("Топор не наказ", "Ропот не каЗан"));
+
+// *** 5. Функция для определения анаграммы без учёта знаков препинания (только буквы и цифры)
+
+function isAnagrammLettesAndNumbers(str1, str2) {
+  const stringOfLetter1 = str1.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
+  const stringOfLetter2 = str2.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
+
+  if (stringOfLetter1.length !== stringOfLetter2.length) return false;
+
+  const objWithLetters = {};
+  for (const letter of stringOfLetter1) {
+    Object.hasOwn(objWithLetters, letter) ? objWithLetters[letter]++ : (objWithLetters[letter] = 1);
+  }
+
+  for (const letter of stringOfLetter2) {
+    if (!Object.hasOwn(objWithLetters, letter)) return false;
+    objWithLetters[letter]--;
+  }
+
+  for (const letter in objWithLetters) if (objWithLetters[letter] !== 0) return false;
+
+  return true;
+}
+
+console.log(isAnagrammLettesAndNumbers("1 Топор, не наказ!", "Ропот - не 1-а Знак?"));
