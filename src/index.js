@@ -21,3 +21,12 @@ function isPalindromeStrict(str) {
 }
 
 console.log(isPalindromeStrict("use stRictcIrts eSu"));
+
+// ** 3. Нужно написать функцию, которая будет определять, являются ли две строки анограммами или нет.
+
+const isAnagramm = (str1, str2) =>
+  [...str1.toLowerCase()].sort().join("") ===
+  [...str2.toLowerCase()].sort().join("");
+
+console.log(isAnagramm('Топор', "Ропот"));
+console.log(isAnagramm('казан', "наказ"));
